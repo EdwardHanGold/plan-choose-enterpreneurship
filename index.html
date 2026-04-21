@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>创翼工坊 | 创业全流程辅助系统</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #f8faf6 0%, #eef3ea 100%);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            padding: 2rem 1.5rem;
+            color: #1c2e1f;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        .hero { text-align: center; margin-bottom: 2.8rem; }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f3b2c, #2b7a4b, #f5b042);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .category { margin-bottom: 3rem; }
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 0.2rem 1rem;
+            margin-bottom: 1.2rem;
+            border-left: 6px solid #e67e22;
+            color: #1d512e;
+            background: rgba(46, 125, 50, 0.05);
+            border-radius: 0 20px 20px 0;
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            border: 1px solid #d9e8d4;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+        .project-card:hover { transform: translateY(-5px); }
+        .custom-card { border: 2px dashed #f5b642; background: #fffef7; }
+        
+        .card-header {
+            background: #fefaf2;
+            padding: 1.2rem;
+            border-bottom: 1px solid #f0e2ca;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .project-name { font-weight: 700; color: #1f543a; font-size: 1.05rem; flex: 1; }
+        
+        .idea-btn {
+            background: #fff;
+            border: 1px solid #e67e22;
+            color: #e67e22;
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+        .idea-btn:hover { background: #e67e22; color: #fff; }
+
+        .card-body { padding: 1.2rem; }
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { font-size: 0.75rem; color: #7d9a72; font-weight: 700; display: block; margin-bottom: 0.4rem; }
+        .input-group input { width: 100%; padding: 0.7rem 1rem; border-radius: 40px; border: 1px solid #ddecd4; outline: none; }
+        
+        .member-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .member-row input { flex: 1; border-radius: 40px; padding: 0.6rem 1rem; border: 1px solid #ddecd4; }
+        
+        .btn-action { width: 100%; padding: 0.8rem; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; }
+        .add-m-btn { background: #f2f7ef; color: #2c7840; font-size: 0.8rem; margin-bottom: 1rem; }
+        .submit-btn { background: linear-gradient(90deg, #2b6e3c, #1d512e); color: white; margin-top: 10px; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000;
+            backdrop-filter: blur(8px);
+        }
+        .modal-content {
+            background: white; width: 92%; max-width: 900px; max-height: 85vh;
+            border-radius: 32px; overflow-y: auto; position: relative; padding: 2.5rem;
+        }
+        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 2rem; cursor: pointer; color: #ccc; }
+        
+        .plan-box h2 { color: #1d512e; margin-bottom: 1rem; text-align: center; }
+        .badge { background: #fdf2e9; color: #e67e22; padding: 4px 12px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 2rem; display: block; text-align: center; }
+        .plan-section { margin-bottom: 1.5rem; }
+        .plan-section h3 { font-size: 1.1rem; color: #e67e22; margin-bottom: 0.5rem; border-left: 4px solid #e67e22; padding-left: 10px; }
+        .plan-text { font-size: 0.95rem; line-height: 1.7; color: #333; background: #f9fbf8; padding: 1rem; border-radius: 12px; white-space: pre-line; }
+
+        .summary-section { margin-top: 4rem; background: #fff; padding: 2rem; border-radius: 32px; border: 1px solid #e2efda; }
+        .submission-item { background: #fefcf7; padding: 1.2rem; border-radius: 20px; margin-bottom: 1rem; border-left: 8px solid #f5a623; display: flex; justify-content: space-between; align-items: center; }
+
+        @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .modal-content { padding: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <h1>⚡ 创翼工坊 · 选题策划系统</h1>
+    </div>
+
+    <div id="categoriesContainer"></div>
+
+    <div class="summary-section">
+        <h2 style="margin-bottom:1.5rem; color: #1d512e;">📊 项目汇总池</h2>
+        <div id="submissionsList"></div>
+    </div>
+</div>
+
+<div id="ideaModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div id="modalBody" class="plan-box"></div>
+    </div>
+</div>
+
+<script>
+    // 所有的 15 个预设选题 + 对应的商业思路
+    const allPlanData = {
+        "校园一站式跑腿服务平台": { overview: "整合代取、代办需求。", market: "快递点远、时间冲突。", product: "跑腿配送服务。", business: "服务费盈利。", marketing: "社群推广。" },
+        "校园便民快闪店": { overview: "应急物资即时售卖。", market: "深夜或急需场景。", product: "文具/生活用品。", business: "零售差价。", marketing: "宿舍地推。" },
+        "校园团购拼单平台": { overview: "集合需求低价采购。", market: "单买贵，学生省钱需求。", product: "水果/零食团购。", business: "抽成/返点。", marketing: "团长模式。" },
+        "校园打印复印拼单": { overview: "集中打印送货上门。", market: "打印店排队长，急用。", product: "线上传件打印。", business: "规模差价。", marketing: "考研群推广。" },
+        "校园失物招领与互助": { overview: "高效率匹配遗失信息。", market: "传统平台效率低。", product: "信息撮合/代找服务。", business: "会员/感谢费。", marketing: "校园卡联名。" },
+        "校园教材循环回收": { overview: "旧书循环流转。", market: "新书贵，旧书处理难。", product: "二手教材交易。", business: "购销差价。", marketing: "毕业季回收。" },
+        "校园闲置物品交换市集": { overview: "邻里交易/交换平台。", market: "闲置囤积空间浪费。", product: "市集撮合。", business: "服务抽成。", marketing: "线下市集。" },
+        "旧物改造创意工作室": { overview: "废品艺术化再造。", market: "追求个性/环保理念。", product: "改造成品售卖。", business: "创意溢价。", marketing: "短视频展示。" },
+        "大学生简历优化服务": { overview: "提升就业竞争力。", market: "求职简历水平参差不齐。", product: "精修/诊断服务。", business: "技能咨询费。", marketing: "招聘季宣讲。" },
+        "PPT 美化与设计服务": { overview: "视觉化呈现辅助。", market: "汇报演示要求提高。", product: "PPT定制美化。", business: "劳务计费。", marketing: "案例展示。" },
+        "期末复习资料共享": { overview: "知识干货整合。", market: "复习盲目，渴望重点。", product: "资料包下载。", business: "内容付费。", marketing: "期末前预热。" },
+        "校园文创周边设计": { overview: "本校特色文化承载。", market: "认同感强，现成产品少。", product: "徽章/手账/卫衣。", business: "创意零售。", marketing: "校友会联动。" },
+        "校园治愈系绿植售卖": { overview: "寝室环境美化。", market: "压力大，需要心理慰藉。", product: "微型盆栽/多肉。", business: "零售利润。", marketing: "宿舍扫楼。" },
+        "助农产品校园团购": { overview: "源头直供公益卖点。", market: "食品安全/性价比。", product: "农特产品。", business: "供应链溢价。", marketing: "公益背书。" },
+        "社区银发族智能教学": { overview: "数字鸿沟跨越服务。", market: "老人不会用智能手机。", product: "陪伴教学/代操作。", business: "公益众筹/补贴。", marketing: "社区合作。" }
+    };
+
+    const categories = [
+        { name: "一、校园服务类", projects: ["校园一站式跑腿服务平台", "校园便民快闪店", "校园团购拼单平台", "校园打印复印拼单", "校园失物招领与互助"] },
+        { name: "二、二手循环 / 环保类", projects: ["校园教材循环回收", "校园闲置物品交换市集", "旧物改造创意工作室"] },
+        { name: "三、学习服务类", projects: ["大学生简历优化服务", "PPT 美化与设计服务", "期末复习资料共享"] },
+        { name: "四、文创产品类", projects: ["校园文创周边设计", "校园治愈系绿植售卖"] },
+        { name: "五、助农 / 公益类", projects: ["助农产品校园团购", "社区银发族智能教学"] }
+    ];
+
+    let submissions = JSON.parse(localStorage.getItem("campus_final_v5") || "[]");
+
+    function buildUI() {
+        const container = document.getElementById("categoriesContainer");
+        let html = categories.map((cat, cIdx) => `
+            <div class="category">
+                <div class="category-title">${cat.name}</div>
+                <div class="projects-grid">
+                    ${cat.projects.map((p, pIdx) => generateCard(p, `p_${cIdx}_${pIdx}`)).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        // 加上自定义选题模块
+        html += `<div class="category">
+            <div class="category-title">✨ 自定义赛道</div>
+            <div class="projects-grid">
+                ${generateCard("", "custom_01", true)}
+            </div>
+        </div>`;
+
+        container.innerHTML = html;
+        renderSubmissions();
+    }
+
+    function generateCard(pName, id, isCustom = false) {
+        return `
+            <div class="project-card ${isCustom ? 'custom-card' : ''}" id="card-${id}">
+                <div class="card-header">
+                    <span class="project-name">${isCustom ? '🎯 自定义新课题' : pName}</span>
+                    ${isCustom ? '' : `<button class="idea-btn" onclick="showIdea('${pName}')">思路介绍</button>`}
+                </div>
+                <div class="card-body">
+                    ${isCustom ? `<div class="input-group"><label>课题名称</label><input type="text" class="p-name" placeholder="请输入你的创意课题"></div>` : ''}
+                    <div class="input-group"><label>队名</label><input type="text" class="t-name" placeholder="队名"></div>
+                    <div class="input-group">
+                        <label>核心成员</label>
+                        <div class="m-list"><div class="member-row"><input type="text" class="m-input" placeholder="姓名"></div></div>
+                        <button class="btn-action add-m-btn" onclick="addM('${id}')">+ 增加成员</button>
+                    </div>
+                    <button class="btn-action submit-btn" onclick="doSubmit('${id}', '${pName}', ${isCustom})">确认提交</button>
+                </div>
+            </div>`;
+    }
+
+    window.showIdea = function(pName) {
+        const data = allPlanData[pName];
+        document.getElementById("modalBody").innerHTML = `
+            <h2>《${pName}》商业计划书</h2>
+            <div class="badge">完全适配课程大纲 · 核心逻辑展示</div>
+            <div class="plan-section"><h3>一、项目概述</h3><div class="plan-text">${data.overview}\n面向在校生提供低门槛服务。</div></div>
+            <div class="plan-section"><h3>二、市场分析</h3><div class="plan-text">${data.market}\n刚需、高频、易于传播。</div></div>
+            <div class="plan-section"><h3>三、产品与服务</h3><div class="plan-text">${data.product}\n基于MVP(最小可行性产品)逻辑。</div></div>
+            <div class="plan-section"><h3>四、商业模式</h3><div class="plan-text">${data.business}\n低成本、高利润率。</div></div>
+            <div class="plan-section"><h3>五、营销策略</h3><div class="plan-text">${data.marketing}\n口碑裂变与社群分发。</div></div>
+        `;
+        document.getElementById("ideaModal").style.display = "flex";
+    };
+
+    window.closeModal = function() { document.getElementById("ideaModal").style.display = "none"; };
+
+    window.addM = function(id) {
+        const row = document.createElement('div');
+        row.className = 'member-row';
+        row.innerHTML = `<input type="text" class="m-input" placeholder="姓名"><button style="border:none; background:none; cursor:pointer" onclick="this.parentElement.remove()">✕</button>`;
+        document.querySelector(`#card-${id} .m-list`).appendChild(row);
+    };
+
+    window.doSubmit = function(id, pName, isCustom) {
+        const card = document.getElementById(`card-${id}`);
+        const finalPName = isCustom ? card.querySelector('.p-name').value : pName;
+        const teamName = card.querySelector('.t-name').value;
+        const members = Array.from(card.querySelectorAll('.m-input')).map(i => i.value).filter(v => v);
+
+        if (!finalPName || !teamName || !members.length) return alert("请完善所有信息");
+
+        submissions.push({ id: Date.now(), pName: finalPName, teamName, members });
+        localStorage.setItem("campus_final_v5", JSON.stringify(submissions));
+        renderSubmissions();
+        alert("提交成功！");
+    };
+
+    function renderSubmissions() {
+        const list = document.getElementById("submissionsList");
+        list.innerHTML = submissions.map(s => `
+            <div class="submission-item">
+                <div>
+                    <strong style="color:#1d512e">📌 ${s.pName}</strong>
+                    <div style="font-size:0.85rem; color:#666; margin-top:4px">队名：${s.teamName} | 成员：${s.members.join('、')}</div>
+                </div>
+                <button onclick="delSub(${s.id})" style="color:red; border:none; background:none; cursor:pointer">删除</button>
+            </div>
+        `).reverse().join('');
+    }
+
+    window.delSub = function(id) {
+        if(confirm("确定删除吗？")) {
+            submissions = submissions.filter(s => s.id !== id);
+            localStorage.setItem("campus_final_v5", JSON.stringify(submissions));
+            renderSubmissions();
+        }
+    }
+
+    buildUI();
+    window.onclick = function(e) { if (e.target == document.getElementById("ideaModal")) closeModal(); }
+</script>
+</body>
+</html>
